@@ -14,6 +14,15 @@ def generate_initial_state_from_file(file):
         grid.append([int(col) for col in row if col.isnumeric()])
     return grid
 
+def get_glider():
+    return generate_initial_state_from_file("figures/glider.txt")
+
+def get_spaceships():
+    return generate_initial_state_from_file("figures/spaceships.txt")
+
+def get_wave():
+    return generate_initial_state_from_file("figures/wave.txt")
+
 def update_state(grid):
     tmp_grid = copy.deepcopy(grid)
     num_rows = len(grid)
@@ -57,13 +66,14 @@ def visualize_grid(grid):
     for _ in range(100):
         grid = update_state(grid)
         img.set_data(grid)
-        plt.pause(1e-1)
+        plt.pause(0.05)
 
 if __name__ == '__main__':
 
     parser = ArgumentParser(description = "Visualization for Conway's Game of Life")
     parser.add_argument("-r", "--random", type = int, required = False, metavar = "", help = "using random initial state of specified size")
     parser.add_argument("-i", "--input", type = str, required = False, metavar = "", help = "reading initial state from specified file")
+    parser.add_argument("-o", "--object", type = str, required = False, metavar = "", help = "using predefined object(s)")
     args = parser.parse_args()
 
     if args.random:
@@ -73,6 +83,18 @@ if __name__ == '__main__':
     elif args.input:
         print("generating grid from file", args.input)
         grid = generate_initial_state_from_file(args.input)
+        visualize_grid(grid)
+    elif args.object:
+        print("generating", args.object)
+        if args.object == "glider":
+            grid = get_glider()
+        elif args.object == "spaceships":
+            grid = get_spaceships()
+        elif args.object == "wave":
+            grid = get_wave()
+        else:
+            print("unknown object: using random state")
+            grid = generate_random_state(64)
         visualize_grid(grid)
     else:
         print("since no initial state was specified, a random grid of size 64x64 is generated")
