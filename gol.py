@@ -52,11 +52,12 @@ def visualize_grid(grid):
     bounds = [0., 0.5, 1.]
     norm = mpl.colors.BoundaryNorm(bounds, cmap.N)
     ax = plt.subplots()[1]
+    img = ax.imshow(grid, interpolation = 'none', cmap = cmap, norm = norm)
 
     for _ in range(100):
         grid = update_state(grid)
-        ax.imshow(grid, interpolation = 'none', cmap = cmap, norm = norm)
-        plt.pause(1e-17)
+        img.set_data(grid)
+        plt.pause(1e-1)
 
 if __name__ == '__main__':
 
